@@ -1,4 +1,4 @@
-import numpy
+﻿import numpy
 import random
 import copy
 from matplotlib.ticker import MultipleLocator
@@ -257,31 +257,18 @@ if __name__ == '__main__':
     particles.quick_sort()
     while gen > 0:
         particles.select()
-        # for i in range(len(particles.pareto)):
-        #     print("正在输出第", i, "阶级")
-        #     for j in particles.pareto[i]:
-        #         print("该粒子编号", j, "适应度函数值为", particles.XX[j][1][0], particles.XX[j][1][1], "拥挤度值为", particles.XX[j][2])
-        # particles.XX_child = []
-        # for i in range(len(particles.XX)):
-        #     temp = copy.deepcopy(particles.XX[i])
-        #     particles.XX_child.append(temp)
         particles.cross()
         particles.mutation()
         particles.update_s_child()
         particles.be_the_one()
         particles.quick_sort_2()
-        # for i in range(len(particles.pareto)):
-        #     print("正在输出第", i, "阶级")
-        #     for j in particles.pareto[i]:
-        #         print("该粒子编号", j, "适应度函数值为", particles.XX2[j][1][0], particles.XX2[j][1][1], "拥挤度值为", particles.XX2[j][2])
         particles.crowd()
         particles.choose()
         particles.quick_sort()
-        for i in range(len(particles.pareto)):
-            print("正在输出第", i, "阶级")
-            for j in particles.pareto[i]:
-                print("该粒子编号", j, "适应度函数值为", particles.XX[j][1][0], particles.XX[j][1][1], "拥挤度值为", particles.XX[j][2])
+        # for i in range(len(particles.pareto)):
+        #     print("正在输出第", i, "阶级")
+        #     for j in particles.pareto[i]:
+        #         print("该粒子编号", j, "适应度函数值为", particles.XX[j][1][0], particles.XX[j][1][1], "拥挤度值为", particles.XX[j][2])
         gen -= 1
 
     particles.draw()
-
