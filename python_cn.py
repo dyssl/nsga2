@@ -298,6 +298,11 @@ class NSGA2():
             self.non_donminate2()
             self.crowd_distance()
             self.select_newparent()  # 根据Pareto等级和拥挤度选取新的父代种群，选择交叉变异
+            self.non_donminate1()
+            for j in range(len(self.fronts)):
+                print("阶级", j)
+                for i in range(len(self.fronts[j])):
+                    print(self.cal_obj(self.population[self.fronts[j][i]]))
         self.draw()
         # print(self.fronts)
         # print(self.population)
