@@ -249,6 +249,61 @@ class Particles:
         # plt.show()
         plt.savefig('Pareto Front 2.png')
 
+    def tops(self):
+        # 选出最好的一个粒子
+        matrix_a = numpy.zeros((len(self.XX), 2))   # 原矩阵,记录粒子的适应度值
+        for i in range(len(self.XX)):
+            matrix_a[i][0] = self.XX[i][1][0]
+            matrix_a[i][1] = self.XX[i][1][1]
+        matrix_b = numpy.zeros((len(self.XX), 2))     # 规范化矩阵
+        total_0 = 0
+        total_1 = 0
+        for i in range(len(matrix_a)):
+            total_0 += pow(matrix_a[i][0], 2)
+            total_1 += pow(matrix_a[i][1], 2)
+        total_0 = pow(total_0, 0.5)
+        total_1 = pow(total_1, 0.5)
+        for i in range(len(matrix_b)):
+            matrix_b[i][0] = matrix_a[i][0] / total_0
+            matrix_b[i][1] = matrix_a[i][1] / total_1
+        # print(matrix_a)
+        # print(matrix_b)
+        best = numpy.zeros(2)
+        for i in range(2):
+            temp = 1
+            for j in range(len(matrix_b)):
+                if matrix_b[j][i] < temp:
+                    temp = matrix_b[j][i]
+            best[i] = temp
+        worst = numpy.zeros(2)
+        for i in range(2):
+            temp = 0
+            for j in range(len(matrix_b)):
+                if matrix_b[j][i] > temp:
+                    temp = matrix_b[j][i]
+            worst[i] = temp
+        # print(best)
+        # print(worst)
+        matrix_c = numpy.zeros(len(matrix_a))       # 存放评价指标，越接近1越好
+        for i in range(len(matrix_a)):
+            d_zheng = 0
+            d_fu = 0
+            for j in range(2):
+                d_zheng += pow((best[j] - matrix_b[i][j]), 2)
+                d_fu += pow((worst[j] - matrix_b[i][j]), 2)
+            d_zheng = pow(d_zheng, 0.5)
+            d_fu = pow(d_fu, 0.5)
+            matrix_c[i] = d_fu / (d_fu + d_zheng)
+        # print(matrix_c)
+        temp = 0
+        temp_index = -1
+        for i in range(len(matrix_c)):
+            if matrix_c[i] > temp:
+                temp = matrix_c[i]
+                temp_index = i
+        print("最好的粒子编号：", temp_index, "它的适应度值：", temp, "函数值1：", self.XX[temp_index][1][0], "函数值2：", self.XX[temp_index][1][1], "粒子：", self.XX[temp_index][0])
+        # print(temp, temp_index)
+
 
 if __name__ == '__main__':
     gen = 500
@@ -265,10 +320,10 @@ if __name__ == '__main__':
         particles.crowd()
         particles.choose()
         particles.quick_sort()
-        # for i in range(len(particles.pareto)):
-        #     print("正在输出第", i, "阶级")
-        #     for j in particles.pareto[i]:
-        #         print("该粒子编号", j, "适应度函数值为", particles.XX[j][1][0], particles.XX[j][1][1], "拥挤度值为", particles.XX[j][2])
         gen -= 1
-
     particles.draw()
+    for i in range(len(particles.pareto)):
+        print("正在输出第", i, "阶级")
+        for j in particles.pareto[i]:
+            print("该粒子编号", j, "适应度函数值为", particles.XX[j][1][0], particles.XX[j][1][1], "拥挤度值为", particles.XX[j][2])
+    particles.tops()
